@@ -12,8 +12,20 @@ st.set_page_config(
     initial_sidebar_state="auto"
 )
 
+# --- IOS SAFARI STATUS BAR COLOR (Theming) ---
+# Dit script injecteert de meta-tag in de <head> sectie van de browser.
+# Hierdoor kleurt de adresbalk/statusbalk op mobiel mee met de gele header (#e6c37d).
+st.markdown("""
+    <script>
+        var meta = document.createElement('meta');
+        meta.name = "theme-color";
+        meta.content = "#e6c37d";
+        document.getElementsByTagName('head')[0].appendChild(meta);
+    </script>
+""", unsafe_allow_html=True)
+
 # --- INJECT CUSTOM TOP BAR HTML ---
-# AANGEPAST: target="_blank" zorgt voor een nieuw tabblad
+# target="_blank" zorgt voor openen in nieuw tabblad
 st.markdown("""
     <div class="custom-top-bar">
         <div class="bar-content">
@@ -734,7 +746,7 @@ else:
                 st.altair_chart(chart, width='stretch')
                 
                 # --- SAMENVATTINGSTABEL ---
-                # STAP 1: Maak een schone lijst van ACTIEVE dagen (Alles behalve 'Ligplaats ...')
+                # STAP 1: Maak een schone lijst van ACTIEVE dagen (NU INCLUSIEF LIGPLAATS)
                 summary_source = ship_data.dropna(subset=['Status']).copy()
                 
                 # STAP 2: Tel het aantal ECHTE dagen inzet (AANGEPAST: DREMPEL 366)
@@ -937,7 +949,7 @@ else:
             
             num_unique_ships = subset['Ship'].nunique()
             
-            caption_str = f"🟢 **In de vaart:** {pct_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {pct_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; **Totaal schepen:** {num_unique_ships}"
+            caption_str = f"🟢 **In de vaart:** {pct_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {pct_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🚢 **Totaal schepen:** {num_unique_ships}"
 
             subset_metrics = calculate_metrics(subset)
             display_coverage_metrics(subset_metrics, start_date, end_date, min_global_date, max_global_date, show_years=False)
