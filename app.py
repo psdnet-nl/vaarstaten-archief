@@ -13,10 +13,11 @@ st.set_page_config(
 )
 
 # --- INJECT CUSTOM TOP BAR HTML ---
+# AANGEPAST: target="_blank" zorgt voor een nieuw tabblad
 st.markdown("""
     <div class="custom-top-bar">
         <div class="bar-content">
-            <a href="https://www.psdnet.nl" target="_self">← Terug naar PSDnet.nl</a>
+            <a href="https://www.psdnet.nl" target="_blank">← Terug naar PSDnet.nl</a>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -151,7 +152,7 @@ st.markdown(
         align-items: baseline; 
         gap: 0.4rem;
         margin-top: -10px; 
-        margin-left: -23px; /* DESKTOP MARGIN */
+        margin-left: -23px; /* DIT IS DE ORIGINELE -23PX DIE TERUG IS */
     }
     
     /* UITZONDERING SIDEBAR: Hier moet de marge 0 zijn (anders valt het weg) */
@@ -936,7 +937,7 @@ else:
             
             num_unique_ships = subset['Ship'].nunique()
             
-            caption_str = f"🟢 **In de vaart:** {pct_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {pct_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🚢 **Totaal schepen:** {num_unique_ships}"
+            caption_str = f"🟢 **In de vaart:** {pct_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {pct_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; **Totaal schepen:** {num_unique_ships}"
 
             subset_metrics = calculate_metrics(subset)
             display_coverage_metrics(subset_metrics, start_date, end_date, min_global_date, max_global_date, show_years=False)
@@ -951,4 +952,5 @@ else:
 
 # --- FOOTER ---
 st.markdown("---")
-st.markdown(f"[PSDnet.nl](https://www.psdnet.nl) Archief vaarstaten")
+# AANGEPAST: Link opent in nieuw tabblad via HTML
+st.markdown(f'<a href="https://www.psdnet.nl" target="_blank">PSDnet.nl</a> Archief vaarstaten', unsafe_allow_html=True)
