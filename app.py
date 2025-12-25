@@ -12,20 +12,7 @@ st.set_page_config(
     initial_sidebar_state="auto"
 )
 
-# --- IOS SAFARI STATUS BAR COLOR (Theming) ---
-# Dit script injecteert de meta-tag in de <head> sectie van de browser.
-# Hierdoor kleurt de adresbalk/statusbalk op mobiel mee met de gele header (#e6c37d).
-st.markdown("""
-    <script>
-        var meta = document.createElement('meta');
-        meta.name = "theme-color";
-        meta.content = "#e6c37d";
-        document.getElementsByTagName('head')[0].appendChild(meta);
-    </script>
-""", unsafe_allow_html=True)
-
 # --- INJECT CUSTOM TOP BAR HTML ---
-# target="_blank" zorgt voor openen in nieuw tabblad
 st.markdown("""
     <div class="custom-top-bar">
         <div class="bar-content">
@@ -73,7 +60,6 @@ st.markdown(
         section[data-testid="stSidebar"] {
             top: 50px !important; height: calc(100vh - 50px) !important;
         }
-        /* Verberg de toggle knop op desktop */
         [data-testid="stSidebarCollapsedControl"] { display: none !important; }
     }
 
@@ -86,29 +72,17 @@ st.markdown(
             top: 0px !important; height: 100vh !important; z-index: 1000020 !important;
         }
         
-        /* Padding in sidebar op mobiel */
         section[data-testid="stSidebar"] > div > div:nth-child(2) {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-            padding-top: 4rem !important;
+            padding-left: 1rem !important; padding-right: 1rem !important; padding-top: 4rem !important;
         }
 
-        /* MENU KNOP (> Icoon) */
+        /* MENU KNOP */
         [data-testid="stSidebarCollapsedControl"] {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            position: fixed !important;
-            top: 65px !important; 
-            left: 10px !important;
-            z-index: 1000003 !important;
-            background-color: #263c52 !important;
-            border: 2px solid #e6c37d !important;
-            border-radius: 5px !important;
-            width: auto !important;
-            height: 35px !important;
-            padding: 0 10px !important;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3) !important;
+            display: flex !important; align-items: center !important; justify-content: center !important;
+            position: fixed !important; top: 65px !important; left: 10px !important; z-index: 1000003 !important;
+            background-color: #263c52 !important; border: 2px solid #e6c37d !important;
+            border-radius: 5px !important; width: auto !important; height: 35px !important;
+            padding: 0 10px !important; box-shadow: 2px 2px 5px rgba(0,0,0,0.3) !important;
             color: transparent !important;
         }
         [data-testid="stSidebarCollapsedControl"] svg { display: none !important; }
@@ -117,30 +91,25 @@ st.markdown(
             visibility: visible !important; display: block !important;
         }
 
-        /* SLUIT KNOP (<< Icoon) */
+        /* SLUIT KNOP */
         section[data-testid="stSidebar"] button[kind="header"] {
-            background-color: #263c52 !important;
-            border: 1px solid #e6c37d !important;
-            color: white !important;
-            margin-right: 1rem !important;
+            background-color: #263c52 !important; border: 1px solid #e6c37d !important;
+            color: white !important; margin-right: 1rem !important;
         }
         section[data-testid="stSidebar"] button[kind="header"] svg { fill: white !important; }
 
         div.block-container {
-            padding-top: 8rem !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+            padding-top: 8rem !important; padding-left: 1rem !important; padding-right: 1rem !important;
         }
         
-        /* Reset marge voor tekstlinks op mobiel (OVERAL) */
+        /* Reset marge voor tekstlinks op mobiel */
         div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
-            margin-left: 0px !important; 
-            margin-top: 5px !important;
+            margin-left: 0px !important; margin-top: 5px !important;
         }
     }
 
     /* =============================================
-       4. OVERIGE STYLING & JAARTALLEN FIX
+       4. OVERIGE STYLING
        ============================================= */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.filter-box-marker) {
         background-color: #bbc2ba; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 15px; border: 1px solid #9aa09a;
@@ -153,57 +122,37 @@ st.markdown(
         border-color: #1a2e1a; color: #1a2e1a; background-color: rgba(255,255,255,0.4);
     }
     
-    /* --- STYLING VOOR TEKST-LINK KNOPPEN (JAARTALLEN) --- */
+    /* JAARTALLEN STYLING */
     div.year-link-marker { display: none; }
     
-    /* STANDAARD (HOOFDINHOUD): Negatieve marge om tekst uit te lijnen */
+    /* Desktop Marge */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
-        display: flex; 
-        flex-direction: row; 
-        flex-wrap: wrap; 
-        align-items: baseline; 
-        gap: 0.4rem;
-        margin-top: -10px; 
-        margin-left: -23px; /* DIT IS DE ORIGINELE -23PX DIE TERUG IS */
+        display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 0.4rem;
+        margin-top: -10px; margin-left: -23px; 
     }
     
-    /* UITZONDERING SIDEBAR: Hier moet de marge 0 zijn (anders valt het weg) */
+    /* Sidebar Reset */
     section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
         margin-left: 0px !important;
     }
     
-    /* Text styling */
+    /* Tekst */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) div[data-testid="stMarkdownContainer"] p {
-        margin-bottom: 0px !important; 
-        font-size: 0.85rem; 
-        color: rgba(49, 51, 63, 0.7); 
-        margin-right: 5px; 
-        font-weight: 600;
+        margin-bottom: 0px !important; font-size: 0.85rem; color: rgba(49, 51, 63, 0.7); margin-right: 5px; font-weight: 600;
     }
 
-    /* Button styling */
+    /* Links */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) button {
-        background-color: transparent !important; 
-        border: none !important; 
-        color: #003366 !important;
-        text-decoration: underline; 
-        padding: 0px !important; 
-        margin: 0px !important; 
-        height: auto !important;
-        min-height: 0px !important; 
-        line-height: 1.6 !important; 
-        font-size: 0.85rem !important; 
-        display: inline;
+        background-color: transparent !important; border: none !important; color: #003366 !important;
+        text-decoration: underline; padding: 0px !important; margin: 0px !important; height: auto !important;
+        min-height: 0px !important; line-height: 1.6 !important; font-size: 0.85rem !important; display: inline;
     }
-    
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) button:hover {
         color: #FFCC00 !important; text-decoration: none;
     }
-
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) div[data-testid="stElementContainer"] {
         width: auto !important; display: inline-flex !important;
     }
-    
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) div[data-testid="stElementContainer"]:has(button):not(:last-child)::after {
         content: ","; color: rgba(49, 51, 63, 0.6); font-size: 0.8rem; margin-left: 0px; 
     }
@@ -224,745 +173,410 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- HELPER: DUTCH DATE FORMATTING ---
+# --- HELPER: FORMATTING ---
 def format_dutch_date(date_obj):
-    if pd.isnull(date_obj):
-        return ""
-    months = {
-        1: "januari", 2: "februari", 3: "maart", 4: "april",
-        5: "mei", 6: "juni", 7: "juli", 8: "augustus",
-        9: "september", 10: "oktober", 11: "november", 12: "december"
-    }
+    if pd.isnull(date_obj): return ""
+    months = {1: "januari", 2: "februari", 3: "maart", 4: "april", 5: "mei", 6: "juni", 7: "juli", 8: "augustus", 9: "september", 10: "oktober", 11: "november", 12: "december"}
     return f"{date_obj.day} {months[date_obj.month]} {date_obj.year}"
 
-# --- HELPER: FORMAT NUMBER (No .0) ---
 def format_ship_count(value):
-    if value.is_integer():
-        return f"{int(value)}"
+    return f"{int(value)}" if value.is_integer() else f"{value:.1f}"
+
+# ==========================================
+# DEEP LINKING & STATE LOGIC
+# ==========================================
+
+VIEW_OPTIONS = ["Vaarstaten per veerboot", "Vaarstaten per veerdienst", "Maandoverzicht"]
+URL_KEYS = {"veerboot": 0, "veerdienst": 1, "maand": 2}
+REVERSE_KEYS = {0: "veerboot", 1: "veerdienst", 2: "maand"}
+
+def parse_date_param(param_value, default_date):
+    try:
+        return datetime.datetime.strptime(param_value, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return default_date
+
+# Functie om de URL te synchroniseren met de HUIDIGE sessie staat
+def sync_url():
+    # 1. Huidige View ophalen
+    current_view = st.session_state.get('view_mode_selector', VIEW_OPTIONS[0])
+    try:
+        view_idx = VIEW_OPTIONS.index(current_view)
+        view_code = REVERSE_KEYS[view_idx]
+    except ValueError:
+        view_code = "veerboot"
+
+    new_params = {"view": view_code}
+
+    # 2. Datums toevoegen
+    if 'date_range_picker' in st.session_state:
+        rng = st.session_state['date_range_picker']
+        if len(rng) > 0: new_params["start"] = rng[0].strftime("%Y-%m-%d")
+        if len(rng) > 1: new_params["end"] = rng[1].strftime("%Y-%m-%d")
+
+    # 3. Context-specifieke parameters toevoegen
+    if view_code == "veerboot":
+        # Gebruik de widget waarde als die bestaat, anders de preference
+        val = st.session_state.get('widget_ship_selector', st.session_state.get('pref_selected_ship'))
+        if val: new_params["ship"] = val
+            
+    elif view_code == "veerdienst":
+        val = st.session_state.get('widget_route_selector', st.session_state.get('pref_selected_route'))
+        if val: new_params["route"] = val
+
+    # 4. URL Overschrijven (Oude params worden gewist)
+    st.query_params.clear()
+    for key, value in new_params.items():
+        st.query_params[key] = value
+
+# Initialisatie bij laden pagina (Lees URL -> Sessie)
+if 'init_done' not in st.session_state:
+    qp = st.query_params
+    
+    # Defaults instellen als URL leeg is
+    if "view" not in qp:
+        st.session_state['view_mode_index'] = 0
+        st.session_state['pref_selected_ship'] = "Koningin Emma (1933)"
+        st.query_params["view"] = "veerboot"
+        st.query_params["ship"] = "Koningin Emma (1933)"
     else:
-        return f"{value:.1f}"
+        # URL parameters overnemen
+        val = qp["view"]
+        if val in URL_KEYS: st.session_state['view_mode_index'] = URL_KEYS[val]
+        if "ship" in qp: st.session_state['pref_selected_ship'] = qp["ship"]
+        if "route" in qp: st.session_state['pref_selected_route'] = qp["route"]
+        if "start" in qp: st.session_state['url_start_date'] = qp["start"]
+        if "end" in qp: st.session_state['url_end_date'] = qp["end"]
+            
+    st.session_state['init_done'] = True
 
-# --- HELPER: CALLBACKS ---
-def update_date_range(new_range):
+# Callbacks voor widgets (Actie -> Update URL)
+def on_view_change(): sync_url()
+def on_ship_change(): 
+    st.session_state['pref_selected_ship'] = st.session_state['widget_ship_selector']
+    sync_url()
+def on_route_change(): 
+    st.session_state['pref_selected_route'] = st.session_state['widget_route_selector']
+    sync_url()
+def on_date_change(): sync_url()
+def update_date_range_button(new_range):
     st.session_state['date_range_picker'] = new_range
-
+    sync_url()
 def reset_all_filters(full_range):
     st.session_state['date_range_picker'] = full_range
     st.session_state['pref_selected_ship'] = "Koningin Emma (1933)"
     st.session_state['pref_selected_route'] = "Vlissingen-Breskens"
+    sync_url()
 
-# Nieuwe callbacks voor de dropdowns
-def update_ship_pref():
-    if 'widget_ship_selector' in st.session_state:
-        st.session_state['pref_selected_ship'] = st.session_state['widget_ship_selector']
-
-def update_route_pref():
-    if 'widget_route_selector' in st.session_state:
-        st.session_state['pref_selected_route'] = st.session_state['widget_route_selector']
-
-# --- HELPER: CALCULATE METRICS ---
+# --- HELPER: METRICS ---
 def calculate_metrics(df_subset):
-    if df_subset.empty:
-        return None
-    
+    if df_subset.empty: return None
     min_date = df_subset['DateObj'].min()
     max_date = df_subset['DateObj'].max()
-    total_days_range = (max_date - min_date).days + 1
-    actual_days_present = df_subset['DateObj'].nunique()
-    
-    coverage_pct = 0
-    if total_days_range > 0:
-        coverage_pct = actual_days_present / total_days_range
-
-    unique_years = sorted(df_subset['DateObj'].dt.year.unique())
-    
     return {
-        'min_date': min_date,
-        'max_date': max_date,
-        'total_days': total_days_range,
-        'actual_days': actual_days_present,
-        'coverage': coverage_pct,
-        'years': unique_years
+        'min_date': min_date, 'max_date': max_date,
+        'total_days': (max_date - min_date).days + 1,
+        'actual_days': df_subset['DateObj'].nunique(),
+        'years': sorted(df_subset['DateObj'].dt.year.unique())
     }
 
-# --- HELPER: DATA PREP FOR TIMELINE ---
+# --- HELPER: TIMELINE DATA ---
 def prepare_timeline_data(ship_df, ship_name):
-    df = ship_df.copy()
-    df = df.sort_values('DateObj')
+    df = ship_df.copy().sort_values('DateObj')
     df['Status'] = df['Status'].fillna('Onbekend')
-    
     df['grp_change'] = (df['Status'] != df['Status'].shift()) | (df['DateObj'].diff().dt.days > 1)
     df['grp_id'] = df['grp_change'].cumsum()
-    
-    intervals = df.groupby(['grp_id', 'Status']).agg(
-        Start=('DateObj', 'min'),
-        End=('DateObj', 'max')
-    ).reset_index()
-    
+    intervals = df.groupby(['grp_id', 'Status']).agg(Start=('DateObj', 'min'), End=('DateObj', 'max')).reset_index()
     intervals['End'] = intervals['End'] + pd.Timedelta(days=1)
     intervals['ShipLabel'] = ship_name
     return intervals
 
-# --- HELPER: DISPLAY METRICS (MET DE JAARTALLEN ERONDER) ---
+# --- HELPER: DISPLAY ---
 def display_coverage_metrics(metrics, current_start, current_end, min_global, max_global, show_years=True, extra_text=None):
-    if not metrics:
-        return
-
-    # Datadekking is verwijderd. Alleen extra tekst tonen indien aanwezig (bijv. gemiddelde)
-    if extra_text:
-        st.caption(extra_text)
-    
+    if not metrics: return
+    if extra_text: st.caption(extra_text)
     is_filtered = (current_start != min_global) or (current_end != max_global)
-    
-    # Als jaren getoond moeten worden, zet ze er direct onder (CSS trekt ze omhoog en naar links)
     if not is_filtered and show_years and metrics['years']:
         with st.container():
-            # De CSS class 'year-link-marker' zorgt voor styling en positionering
             st.markdown('<div class="year-link-marker"></div>', unsafe_allow_html=True)
             st.markdown("**Beschikbare jaren:**")
-            
             for year in metrics['years']:
                 start_y = datetime.date(year, 1, 1)
                 end_y = datetime.date(year, 12, 31)
                 start_y = max(start_y, min_global)
                 end_y = min(end_y, max_global)
-                
-                st.button(
-                    str(year), 
-                    key=f"inline_year_{year}",
-                    on_click=update_date_range,
-                    args=((start_y, end_y),)
-                )
+                st.button(str(year), key=f"inline_year_{year}", on_click=update_date_range_button, args=((start_y, end_y),))
 
-# --- HELPER: RENDER PERIOD & RESET BUTTON ---
 def render_period_header(start_date, end_date, min_global, max_global, key_suffix):
-    is_custom_filter = (start_date != min_global) or (end_date != max_global)
+    is_custom = (start_date != min_global) or (end_date != max_global)
     range_str = f"{format_dutch_date(start_date)} - {format_dutch_date(end_date)}"
-
-    if is_custom_filter:
+    if is_custom:
         with st.container():
             st.markdown('<div class="filter-box-marker"></div>', unsafe_allow_html=True)
             col_txt, col_btn = st.columns([0.85, 0.15])
-            with col_txt:
-                st.markdown(f"**Filter actief:** {range_str} *(Niet alle data zichtbaar)*")
-            with col_btn:
-                st.button(
-                    "Reset", 
-                    key=f"reset_main_{key_suffix}",
-                    on_click=reset_all_filters,
-                    args=((min_global, max_global),),
-                    width='stretch'
-                )
+            with col_txt: st.markdown(f"**Filter actief:** {range_str} *(Niet alle data zichtbaar)*")
+            with col_btn: st.button("Reset", key=f"reset_main_{key_suffix}", on_click=reset_all_filters, args=((min_global, max_global),), width='stretch')
     else:
         st.markdown(f"##### Volledige Periode: {range_str}")
 
-
-# --- DATA LOADING & CLEANING ---
+# --- DATA LOADING ---
 @st.cache_data
 def load_data():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    search_pattern = os.path.join(script_dir, "**", "*.csv")
-    files = glob.glob(search_pattern, recursive=True)
-    
-    st.session_state['debug_search_path'] = script_dir
-    st.session_state['debug_files_found'] = len(files)
-    
+    files = glob.glob(os.path.join(script_dir, "**", "*.csv"), recursive=True)
     all_data = []
     debug_log = []
-    
-    if not files:
-        return pd.DataFrame(), [], ["Geen bestanden gevonden in huidige map (en submappen)."]
-
+    if not files: return pd.DataFrame(), [], ["Geen bestanden gevonden."]
     for file in files:
         try:
             df = pd.read_csv(file, sep=None, engine='python')
-            
-            if df.empty or len(df.columns) < 2:
-                debug_log.append(f"❌ {os.path.basename(file)}: Te weinig kolommen ({len(df.columns)}).")
+            if df.empty or len(df.columns) < 2: 
+                debug_log.append(f"❌ {os.path.basename(file)}: Te weinig kolommen.")
                 continue
-
-            raw_month_str = df.columns[0] 
+            raw_month_str = df.columns[0]
             df.rename(columns={df.columns[0]: 'DateRaw'}, inplace=True)
-            
-            # --- ROBUUSTE DATUM PARSING ---
             df['DateObj'] = pd.to_datetime(df['DateRaw'], format='%d-%m-%Y', errors='coerce')
-            
             if df['DateObj'].isna().any():
-                clean_dates = df['DateRaw'].astype(str).str.split(' GMT').str[0]
-                df['DateObj'] = df['DateObj'].fillna(pd.to_datetime(clean_dates, errors='coerce'))
-            
-            valid_dates = df['DateObj'].notna().sum()
-            if valid_dates == 0:
-                first_val = df['DateRaw'].iloc[0] if not df.empty else "Leeg"
-                debug_log.append(f"❌ {os.path.basename(file)}: Datums niet herkend. Eerste waarde: '{first_val}'")
-                continue
-                
+                clean = df['DateRaw'].astype(str).str.split(' GMT').str[0]
+                df['DateObj'] = df['DateObj'].fillna(pd.to_datetime(clean, errors='coerce'))
             df = df.dropna(subset=['DateObj'])
+            if df.empty: continue
             df['Day'] = df['DateObj'].dt.day.astype(int)
             df['Source_File_Month'] = raw_month_str
             df['Month_Start_Date'] = df['DateObj'].dt.to_period('M').dt.to_timestamp()
-            
-            metadata_cols = ['DateRaw', 'DateObj', 'Day', 'Source_File_Month', 'Month_Start_Date']
-            ship_cols = [c for c in df.columns if c not in metadata_cols]
-            
-            df_melted = df.melt(
-                id_vars=metadata_cols, 
-                value_vars=ship_cols, 
-                var_name='Ship', 
-                value_name='Status'
-            )
-            
-            all_data.append(df_melted)
-            debug_log.append(f"✅ {os.path.basename(file)}: {len(df)} rijen")
-            
+            meta = ['DateRaw', 'DateObj', 'Day', 'Source_File_Month', 'Month_Start_Date']
+            ship_cols = [c for c in df.columns if c not in meta]
+            all_data.append(df.melt(id_vars=meta, value_vars=ship_cols, var_name='Ship', value_name='Status'))
+            debug_log.append(f"✅ {os.path.basename(file)}")
         except Exception as e:
-            debug_log.append(f"⚠️ {os.path.basename(file)}: Error ({str(e)})")
-    
-    if all_data:
-        full_df = pd.concat(all_data, ignore_index=True)
-        return full_df, files, debug_log
-    else:
-        return pd.DataFrame(), files, debug_log
+            debug_log.append(f"⚠️ {os.path.basename(file)}: {e}")
+    if all_data: return pd.concat(all_data, ignore_index=True), files, debug_log
+    return pd.DataFrame(), files, debug_log
 
-# --- LOAD RAW DATA ---
 raw_df, found_files, debug_log = load_data()
-global_metrics_raw = calculate_metrics(raw_df)
 
-# --- GLOBAL COLOR SCALES (Consistent across all pages) ---
+# --- COLORS ---
 if not raw_df.empty:
-    # 1. STATUS SCALE (Voor Schip Historie) - AANGEPAST MET CONTRASTRIJKE KLEUREN
-    
-    # De gewenste vaste kleuren
     custom_color_map = {
-        # GRIJSTINTEN
-        'Werf': '#A0A6A0',          
-        'Werkplaats': '#788078',    
-        'Binnen': '#555955',        
-        
-        # GROENEN
-        'Vlissingen-Breskens': '#437C3E',        
-        'Kruiningen-Perkpolder': '#2A4B27',      
-        'Terneuzen-Hoedekenskerke': '#88B084',   
-        
-        # BLAUWEN
-        'Zierikzee-Katseveer': '#36648B',        
-        'Kortgene-Wolphaartsdijk': '#6CA0DC',    
-        'Veere-Kamperland': '#1C3549',           
-        
-        # Variaties
-        'Ligplaats Vlissingen': '#555955', 
-        'Ligplaats Perkpolder': '#555955',
-        'Ligplaats Zierikzee': '#555955',
-        'Ligplaats Katseveer': '#555955'
+        'Werf': '#A0A6A0', 'Werkplaats': '#788078', 'Binnen': '#555955',        
+        'Vlissingen-Breskens': '#437C3E', 'Kruiningen-Perkpolder': '#2A4B27', 'Terneuzen-Hoedekenskerke': '#88B084',   
+        'Zierikzee-Katseveer': '#36648B', 'Kortgene-Wolphaartsdijk': '#6CA0DC', 'Veere-Kamperland': '#1C3549',           
+        'Ligplaats Vlissingen': '#555955', 'Ligplaats Perkpolder': '#555955',
+        'Ligplaats Zierikzee': '#555955', 'Ligplaats Katseveer': '#555955'
     }
-    
-    # Een divers palet voor alle overige statussen
-    fallback_palette = [
-        "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-        "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
-        "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5",
-        "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"
-    ]
-    
-    all_statuses_in_data = sorted([str(s) for s in raw_df['Status'].unique() if pd.notna(s)])
-    
-    final_domain = []
-    final_range = []
-    palette_index = 0
-    
-    for status in all_statuses_in_data:
-        final_domain.append(status)
-        if status in custom_color_map:
-            final_range.append(custom_color_map[status])
-        else:
-            color = fallback_palette[palette_index % len(fallback_palette)]
-            final_range.append(color)
-            palette_index += 1
-            
-    global_status_scale = alt.Scale(domain=final_domain, range=final_range)
-    
-    # 2. SHIP SCALE (Voor Dienst/Lijn Zoeker)
-    all_ships = sorted([str(s) for s in raw_df['Ship'].unique() if pd.notna(s)])
-    global_ship_scale = alt.Scale(domain=all_ships, scheme='category20') 
+    fallback_palette = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5"]
+    all_stats = sorted([str(s) for s in raw_df['Status'].unique() if pd.notna(s)])
+    final_range = [custom_color_map.get(s, fallback_palette[i % len(fallback_palette)]) for i, s in enumerate(all_stats)]
+    global_status_scale = alt.Scale(domain=all_stats, range=final_range)
+    global_ship_scale = alt.Scale(domain=sorted([str(s) for s in raw_df['Ship'].unique() if pd.notna(s)]), scheme='category20')
 else:
     global_status_scale = alt.Scale(scheme='category20')
     global_ship_scale = alt.Scale(scheme='category20')
 
-# --- INITIALIZE PREFERENCE STATE ---
-if 'pref_selected_route' not in st.session_state:
-    st.session_state['pref_selected_route'] = "Vlissingen-Breskens"
-
-if 'pref_selected_ship' not in st.session_state:
-    st.session_state['pref_selected_ship'] = "Koningin Emma (1933)"
+# --- APPLY URL DATES ---
+if not raw_df.empty:
+    min_glob = raw_df['DateObj'].min().date()
+    max_glob = raw_df['DateObj'].max().date()
+    cur_start = parse_date_param(st.session_state.get('url_start_date', ''), min_glob)
+    cur_end = parse_date_param(st.session_state.get('url_end_date', ''), max_glob)
+    # Clamp
+    cur_start = max(min_glob, cur_start)
+    cur_end = min(max_glob, cur_end)
+    if 'date_range_picker' not in st.session_state:
+        st.session_state['date_range_picker'] = (cur_start, cur_end)
 
 # ==========================================
-# SIDEBAR OPBOUW
+# SIDEBAR
 # ==========================================
-
-# VERVANG STANDAARD TITEL DOOR KLIKBARE LINK NAAR ROOT (RELOAD)
-st.sidebar.markdown(
-    """
-    <a href="." target="_self" style="text-decoration: none; color: inherit;">
-        <h1 style="margin-top: 0rem; margin-bottom: 0rem; padding-bottom: 1rem;">PSDnet.nl Vaarstaten</h1>
-    </a>
-    """,
-    unsafe_allow_html=True
-)
-
-# 1. NAVIGATIE
+st.sidebar.markdown("""<a href="." target="_self" style="text-decoration: none; color: inherit;"><h1 style="margin-top: 0rem; margin-bottom: 0rem; padding-bottom: 1rem;">PSDnet.nl Vaarstaten</h1></a>""", unsafe_allow_html=True)
 st.sidebar.header("Inhoud website")
-view_mode = st.sidebar.radio("Kies een weergave:", ["Vaarstaten per veerboot", "Vaarstaten per veerdienst", "Maandoverzicht"])
 
+idx = st.session_state.get('view_mode_index', 0)
+view_mode = st.sidebar.radio("Kies een weergave:", VIEW_OPTIONS, index=idx, key='view_mode_selector', on_change=on_view_change)
 st.sidebar.markdown("---")
 
-# 2. FILTER LOGICA
 if not raw_df.empty:
-    min_global_date = raw_df['DateObj'].min().date()
-    max_global_date = raw_df['DateObj'].max().date()
-
-    if 'date_range_picker' not in st.session_state:
-        st.session_state['date_range_picker'] = (min_global_date, max_global_date)
-
-    # A. SNELKIEZER JAREN (NU ALS TEXT LINKS, MET TITEL OP APARTE REGEL)
     st.sidebar.write("**Snelkiezer Jaren:**")
-    
-    # Marker voor CSS styling
     st.sidebar.markdown('<div class="year-link-marker"></div>', unsafe_allow_html=True)
+    years = sorted(raw_df['DateObj'].dt.year.unique())
+    for y in years:
+        sy = max(datetime.date(y, 1, 1), min_glob)
+        ey = min(datetime.date(y, 12, 31), max_glob)
+        st.sidebar.button(str(y), key=f"btn_year_{y}", on_click=update_date_range_button, args=((sy, ey),))
     
-    unique_years = sorted(raw_df['DateObj'].dt.year.unique())
-    
-    for year in unique_years:
-        start_y = datetime.date(year, 1, 1)
-        end_y = datetime.date(year, 12, 31)
-        start_y = max(start_y, min_global_date)
-        end_y = min(end_y, max_global_date)
-        
-        st.sidebar.button(
-            str(year), 
-            key=f"btn_year_{year}",
-            on_click=update_date_range,
-            args=((start_y, end_y),)
-        )
-
-    # B. RESET BUTTON (NU OOK ALS TEXT LINK GESTYLED VIA CSS)
-    # We zetten hem ook in een year-link-marker container voor consistente styling
     st.sidebar.markdown('<div class="year-link-marker"></div>', unsafe_allow_html=True)
-    st.sidebar.button(
-        "Reset datumfilter", 
-        key="reset_sidebar", 
-        on_click=reset_all_filters,
-        args=((min_global_date, max_global_date),)
-    )
-
-    # C. DATUM SELECTIE
-    st.sidebar.markdown("<br>", unsafe_allow_html=True) # Beetje ruimte
-    dates = st.sidebar.date_input(
-        "Selecteer datumreeks:",
-        min_value=min_global_date,
-        max_value=max_global_date,
-        key='date_range_picker'
-    )
-
-    # Filter Logic
+    st.sidebar.button("Reset datumfilter", key="reset_sidebar", on_click=reset_all_filters, args=((min_glob, max_glob),))
+    st.sidebar.markdown("<br>", unsafe_allow_html=True) 
+    
+    dates = st.sidebar.date_input("Selecteer datumreeks:", min_value=min_glob, max_value=max_glob, key='date_range_picker', on_change=on_date_change)
+    
     if len(dates) == 2:
         start_date, end_date = dates
         mask = (raw_df['DateObj'].dt.date >= start_date) & (raw_df['DateObj'].dt.date <= end_date)
         df = raw_df.loc[mask].copy()
     else:
-        if len(dates) == 1:
-            start_date = dates[0]
-        else:
-            start_date = min_global_date
-        end_date = max_global_date
+        start_date, end_date = (dates[0], min_glob) if len(dates) == 1 else (min_glob, max_glob)
         df = raw_df.copy()
 
-    # D. FOOTER INFO
-    if len(found_files) == 0:
-        st.sidebar.error("Geen bestanden gevonden")
-
+    if not found_files: st.sidebar.error("Geen bestanden gevonden")
 else:
     df = pd.DataFrame()
-    start_date = None
-    end_date = None
+    start_date, end_date = None, None
     st.error("⚠️ Geen data gevonden!")
-    st.warning("De app heeft gezocht naar CSV-bestanden, maar kon geen geldige data vinden.")
-    with st.expander("🔍 Bekijk Import Logboek (Debug)", expanded=True):
-        if not found_files:
-            st.write("Geen bestanden gevonden met extensie .csv.")
-        else:
-            for line in debug_log:
-                if "❌" in line:
-                    st.error(line)
-                elif "⚠️" in line:
-                    st.warning(line)
-                else:
-                    st.success(line)
-
 
 # ==========================================
 # MAIN CONTENT
 # ==========================================
-
-if df.empty and raw_df.empty:
-    pass 
-elif df.empty:
-    st.warning("Geen data gevonden in deze selectie. Reset het filter.")
-else:
-
-    # --- VIEW: SCHIP HISTORIE ---
+if not df.empty:
     if view_mode == "Vaarstaten per veerboot":
         st.title("Vaarstaten per veerboot")
-        
         ships = sorted(raw_df['Ship'].unique())
-        
         if ships:
-            # Defaults logic
-            current_pref_ship = st.session_state.get('pref_selected_ship', ships[0])
-            if current_pref_ship not in ships:
-                if "Koningin Emma (1933)" in ships:
-                    current_pref_ship = "Koningin Emma (1933)"
-                else:
-                    current_pref_ship = ships[0]
-                st.session_state['pref_selected_ship'] = current_pref_ship
+            # Pre-select based on session state preference or url
+            pref = st.session_state.get('pref_selected_ship', "Koningin Emma (1933)")
+            if pref not in ships: pref = ships[0]
+            try: s_idx = ships.index(pref)
+            except: s_idx = 0
             
-            try:
-                ship_index = ships.index(current_pref_ship)
-            except ValueError:
-                ship_index = 0
+            sel_ship = st.selectbox("Selecteer Schip:", ships, index=s_idx, key='widget_ship_selector', on_change=on_ship_change)
+            ship_data = df[df['Ship'] == sel_ship].sort_values('DateObj')
             
-            selected_ship = st.selectbox(
-                "Selecteer Schip:", 
-                ships, 
-                index=ship_index,
-                key='widget_ship_selector',
-                on_change=update_ship_pref
-            )
-            
-            ship_data = df[df['Ship'] == selected_ship].copy().sort_values(by='DateObj')
-            
-            st.subheader(f"Logboek: {selected_ship}")
-            render_period_header(start_date, end_date, min_global_date, max_global_date, "schip")
+            st.subheader(f"Logboek: {sel_ship}")
+            render_period_header(start_date, end_date, min_glob, max_glob, "schip")
             
             if not ship_data.empty:
-                ship_metrics = calculate_metrics(ship_data)
-                
-                display_coverage_metrics(ship_metrics, start_date, end_date, min_global_date, max_global_date)
-                
-                # --- TOEVOEGING BRONVERMELDING NA BESCHIKBARE JAREN ---
+                metrics = calculate_metrics(ship_data)
+                display_coverage_metrics(metrics, start_date, end_date, min_glob, max_glob)
                 st.caption(SOURCE_CITATION)
                 
-                # --- GANTT / TIMELINE CHART ---
                 st.markdown("### Tijdslijn Inzet")
+                excl = ["Overbrenging", "Speciale vaart", "Gestaakt", "Gevorderd door burgemeester Zierikzee"]
+                # Visible: Not in exclude AND NOT starting with Ligplaats
+                vis = ship_data[(~ship_data['Status'].isin(excl)) & (~ship_data['Status'].astype(str).str.startswith("Ligplaats"))].copy()
+                # Hidden: In exclude OR starting with Ligplaats
+                hid = ship_data[(ship_data['Status'].isin(excl)) | (ship_data['Status'].astype(str).str.startswith("Ligplaats"))].copy()
                 
-                # STAP 1: DEFINIEER DE EXCLUSION LIST
-                exclude_list = ["Overbrenging", "Speciale vaart", "Gestaakt", "Gevorderd door burgemeester Zierikzee"]
+                int_v = prepare_timeline_data(vis, sel_ship) if not vis.empty else pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
+                int_h = prepare_timeline_data(hid, sel_ship) if not hid.empty else pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
                 
-                # STAP 2: SPLITS DATA IN 'VISIBLE' (KLEUR) EN 'HIDDEN' (GRIJS)
-                mask_visible = (~ship_data['Status'].isin(exclude_list)) & (~ship_data['Status'].astype(str).str.startswith("Ligplaats"))
-                df_visible = ship_data[mask_visible].copy()
+                # Chart
+                dom_s = pd.Timestamp(start_date).to_pydatetime()
+                dom_e = (pd.Timestamp(end_date) + pd.Timedelta(days=1)).to_pydatetime()
                 
-                mask_hidden = (ship_data['Status'].isin(exclude_list)) | (ship_data['Status'].astype(str).str.startswith("Ligplaats"))
-                df_hidden = ship_data[mask_hidden].copy()
-                
-                # STAP 3: BEREID INTERVALS VOOR
-                intervals_visible = pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
-                if not df_visible.empty:
-                    intervals_visible = prepare_timeline_data(df_visible, selected_ship)
-                    
-                intervals_hidden = pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
-                if not df_hidden.empty:
-                    intervals_hidden = prepare_timeline_data(df_hidden, selected_ship)
-
-                # STAP 4: ACHTERGROND LAAG (HATCHING VOOR MISSING DATA)
-                ts_start = pd.Timestamp(start_date)
-                ts_end = pd.Timestamp(end_date) + pd.Timedelta(days=1)
-                
-                # FIX: Explicit conversion to python datetime for domain scale
-                domain_start = ts_start.to_pydatetime()
-                domain_end = ts_end.to_pydatetime()
-                
-                bg_data = pd.DataFrame([{
-                    'Start': domain_start,
-                    'End': domain_end,
-                    'ShipLabel': selected_ship
-                }])
-                
-                bg_chart = alt.Chart(bg_data).mark_bar(
-                    height=30
-                ).encode(
-                    # FIX: labelAngle=0 forces horizontal labels
-                    # FIX: Explicit ':T' type definition ensures temporal scale
-                    x=alt.X('Start:T', 
-                        title=None, 
-                        axis=alt.Axis(format='%d-%m-%Y', labelAngle=0),
-                        scale=alt.Scale(domain=[domain_start, domain_end])
-                    ), 
-                    x2='End:T',
-                    y=alt.Y('ShipLabel:N', title=None, axis=None),
-                    color=alt.value("url(#diagonal-stripe)") # Layer 1: Hatching
+                base = alt.Chart(pd.DataFrame([{'Start': dom_s, 'End': dom_e, 'ShipLabel': sel_ship}])).mark_bar(height=30).encode(
+                    x=alt.X('Start:T', title=None, axis=alt.Axis(format='%d-%m-%Y', labelAngle=0), scale=alt.Scale(domain=[dom_s, dom_e])),
+                    x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), color=alt.value("url(#diagonal-stripe)")
                 )
                 
-                # STAP 5: HIDDEN LAAG (EFFEN GRIJS VOOR EXCLUDED/LIGPLAATS)
-                # FIX: donkerder grijs en ondoorzichtig gemaakt om strepen te maskeren
-                hidden_chart = alt.Chart(intervals_hidden).mark_bar(height=30, opacity=1.0).encode(
-                    x=alt.X('Start:T'), # Forceer :T
-                    x2='End:T',
-                    y=alt.Y('ShipLabel:N', title=None, axis=None),
-                    color=alt.value("#999999"), # Layer 2: Dark Gray
+                c_hid = alt.Chart(int_h).mark_bar(height=30, opacity=1).encode(
+                    x='Start:T', x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), 
+                    color=alt.value("#999999"), tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
+                )
+                c_vis = alt.Chart(int_v).mark_bar(height=30).encode(
+                    x='Start:T', x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
+                    color=alt.Color('Status:N', scale=global_status_scale, legend=None),
                     tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
                 )
+                st.altair_chart((base + c_hid + c_vis).properties(height=120), width='stretch')
                 
-                # STAP 6: VISIBLE LAAG (GEKLEURD)
-                visible_chart = alt.Chart(intervals_visible).mark_bar(height=30).encode(
-                    x=alt.X('Start:T'), # Forceer :T
-                    x2='End:T',
-                    y=alt.Y('ShipLabel:N', title=None, axis=None),
-                    color=alt.Color(
-                        'Status:N', 
-                        scale=global_status_scale,
-                        legend=None 
-                    ),
-                    tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
-                )
-                
-                # COMBINEER: BG (onder) + Hidden (midden) + Visible (boven)
-                final_timeline = (bg_chart + hidden_chart + visible_chart).properties(height=120)
-
-                st.altair_chart(final_timeline, width='stretch')
-                
-                # --- STATS BAR CHART ---
+                # Stats
                 st.caption("**Verdeling van statussen:**")
-                status_counts = ship_data['Status'].value_counts().reset_index()
-                status_counts.columns = ['Status', 'Count']
-                dynamic_height_ship = 80 + (len(status_counts) * 35)
-                
-                chart = alt.Chart(status_counts).mark_bar().encode(
+                cts = ship_data['Status'].value_counts().reset_index()
+                cts.columns = ['Status', 'Count']
+                st.altair_chart(alt.Chart(cts).mark_bar().encode(
                     x=alt.X('Count:Q', title='Aantal Dagen', axis=alt.Axis(tickMinStep=1, format='d')),
-                    y=alt.Y('Status:N', sort='-x', title='Status', axis=alt.Axis(labelLimit=500)), 
-                    color=alt.Color('Status:N', scale=global_status_scale, legend=None), 
-                    tooltip=['Status:N', 'Count:Q']
-                ).properties(height=dynamic_height_ship)
+                    y=alt.Y('Status:N', sort='-x', title='Status', axis=alt.Axis(labelLimit=500)),
+                    color=alt.Color('Status:N', scale=global_status_scale, legend=None), tooltip=['Status:N', 'Count:Q']
+                ).properties(height=80 + len(cts)*35), width='stretch')
                 
-                st.altair_chart(chart, width='stretch')
+                # Table (ALL statuses, even Ligplaats)
+                sum_src = ship_data.dropna(subset=['Status']).copy()
+                if len(sum_src) < 366:
+                    filt_txt = ""
+                    if (start_date != min_glob) or (end_date != max_glob):
+                        filt_txt = f" (Filter: {start_date.year})" if start_date.year == end_date.year else f" (Filter: {start_date.year} - {end_date.year})"
+                    st.markdown(f"### Samenvatting inzet: {sel_ship}{filt_txt}")
+                    if not sum_src.empty:
+                        sum_src = sum_src.sort_values('DateObj')
+                        sum_src['grp'] = (sum_src['Status'] != sum_src['Status'].shift()) | (sum_src['DateObj'].diff().dt.days > 1)
+                        grps = sum_src.groupby([sum_src['grp'].cumsum(), 'Status']).agg(S=('DateObj', 'min'), E=('DateObj', 'max')).reset_index().sort_values('S')
+                        rows = ""
+                        for _, r in grps.iterrows():
+                            d_str = format_dutch_date(r['S'])
+                            if r['S'] != r['E']: d_str += f" - {format_dutch_date(r['E'])}"
+                            rows += f"<tr style='border-bottom:1px solid #eee'><td style='padding:8px'>{r['Status']}</td><td style='padding:8px'>{d_str}</td></tr>"
+                        st.markdown(f"<table style='width:100%; border-collapse:collapse'><thead><tr style='border-bottom:2px solid #ddd; background:#f9f9f9'><th style='padding:8px; text-align:left'>Veerdienst / Status</th><th style='padding:8px; text-align:left'>Periode</th></tr></thead><tbody>{rows}</tbody></table>", unsafe_allow_html=True)
                 
-                # --- SAMENVATTINGSTABEL ---
-                # STAP 1: Maak een schone lijst van ACTIEVE dagen (NU INCLUSIEF LIGPLAATS)
-                summary_source = ship_data.dropna(subset=['Status']).copy()
-                
-                # STAP 2: Tel het aantal ECHTE dagen inzet (AANGEPAST: DREMPEL 366)
-                if len(summary_source) < 366:
-                    # Check filter status voor titel
-                    is_filtered = (start_date != min_global_date) or (end_date != max_global_date)
-                    title_suffix = ""
-                    if is_filtered:
-                        if start_date.year == end_date.year:
-                            title_suffix = f" (Filter: {start_date.year})"
-                        else:
-                            title_suffix = f" (Filter: {start_date.year} - {end_date.year})"
-                    
-                    st.markdown(f"### Samenvatting inzet: {selected_ship}{title_suffix}")
-                    
-                    if not summary_source.empty:
-                        # Sorteer en groepeer opeenvolgende periodes
-                        summary_source = summary_source.sort_values('DateObj')
-                        summary_source['grp_change'] = (summary_source['Status'] != summary_source['Status'].shift()) | (summary_source['DateObj'].diff().dt.days > 1)
-                        summary_source['grp_id'] = summary_source['grp_change'].cumsum()
-                        
-                        summary_intervals = summary_source.groupby(['grp_id', 'Status']).agg(
-                            Start=('DateObj', 'min'),
-                            End=('DateObj', 'max')
-                        ).reset_index().sort_values('Start')
-                        
-                        html_rows = ""
-                        for _, row in summary_intervals.iterrows():
-                            start_str = format_dutch_date(row['Start'])
-                            end_str = format_dutch_date(row['End'])
-                            status_val = row['Status']
-                            
-                            if row['Start'] == row['End']:
-                                date_display = start_str
-                            else:
-                                date_display = f"{start_str} - {end_str}"
-                                
-                            html_rows += f"""<tr style="border-bottom: 1px solid #eee;">
-<td style="padding: 8px;">{status_val}</td>
-<td style="padding: 8px;">{date_display}</td>
-</tr>"""
-                        
-                        full_html = f"""<table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.95rem;">
-<thead>
-<tr style="border-bottom: 2px solid #ddd; background-color: #f9f9f9;">
-<th style="padding: 8px; text-align: left;">Veerdienst / Status</th>
-<th style="padding: 8px; text-align: left;">Periode</th>
-</tr>
-</thead>
-<tbody>
-{html_rows}
-</tbody>
-</table>"""
-                        st.markdown(full_html, unsafe_allow_html=True)
-                    else:
-                        st.info("Geen actieve inzet gevonden in deze periode.")
-
                 st.markdown("### Ruwe data")
                 st.dataframe(ship_data[['DateRaw', 'Status']], width='stretch', height=500, hide_index=True)
             else:
-                st.info(f"Geen data gevonden voor **{selected_ship}** in de periode {format_dutch_date(start_date)} t/m {format_dutch_date(end_date)}.")
-        else:
-            st.warning("Geen schepen gevonden in de database.")
+                st.info(f"Geen data gevonden voor {sel_ship} in deze periode.")
 
-    # --- VIEW: DIENST ZOEKER ---
     elif view_mode == "Vaarstaten per veerdienst":
         st.title("Vaarstaten per veerdienst")
+        excl = ["Aan de grond", "Binnen", "Defect", "Gestaakt", "Gevorderd door burgemeester Zierikzee", "Ligplaats Katseveer", "Ligplaats Perkpolder", "Ligplaats Vlissingen", "Ligplaats Zierikzee", "Overbrenging", "Reserve Vlissingen-Breskens", "Speciale vaart", "Werf", "Werkplaats"]
+        routes = sorted([str(x) for x in raw_df['Status'].unique() if pd.notna(x) and str(x) not in excl and not str(x).startswith("Ligplaats") and not str(x).startswith("Reserve")])
         
-        excluded_statuses = [
-            "Aan de grond", "Binnen", "Defect", "Gestaakt", 
-            "Gevorderd door burgemeester Zierikzee", 
-            "Ligplaats Katseveer", "Ligplaats Perkpolder", 
-            "Ligplaats Vlissingen", "Ligplaats Zierikzee", 
-            "Overbrenging", "Reserve Vlissingen-Breskens", 
-            "Speciale vaart", "Werf", "Werkplaats"
-        ]
+        pref = st.session_state.get('pref_selected_route', routes[0] if routes else "")
+        if pref not in routes and routes: pref = routes[0]
+        try: r_idx = routes.index(pref)
+        except: r_idx = 0
         
-        all_statuses = raw_df['Status'].unique()
+        sel_route = st.selectbox("Selecteer Dienst/Status:", routes, index=r_idx, key='widget_route_selector', on_change=on_route_change)
+        route_data = df[df['Status'].astype(str) == sel_route].sort_values('DateObj')
         
-        routes = sorted([
-            str(x) for x in all_statuses 
-            if pd.notna(x) 
-            and str(x) not in excluded_statuses
-            and not str(x).startswith("Ligplaats")
-            and not str(x).startswith("Reserve")
-        ])
+        st.subheader(f"Welke schepen voeren op: {sel_route}?")
+        render_period_header(start_date, end_date, min_glob, max_glob, "dienst")
         
-        current_pref_route = st.session_state.get('pref_selected_route', routes[0] if routes else "")
-        if current_pref_route not in routes:
-            if "Vlissingen-Breskens" in routes:
-                current_pref_route = "Vlissingen-Breskens"
-            elif routes:
-                current_pref_route = routes[0]
-            st.session_state['pref_selected_route'] = current_pref_route
-        
-        if routes:
-            try:
-                route_index = routes.index(current_pref_route)
-            except ValueError:
-                route_index = 0
-
-            selected_route = st.selectbox(
-                "Selecteer Dienst/Status:", 
-                routes, 
-                index=route_index,
-                key='widget_route_selector',
-                on_change=update_route_pref
-            )
+        if not route_data.empty:
+            met = calculate_metrics(route_data)
+            days = route_data['DateObj'].nunique()
+            avg = len(route_data)/days if days > 0 else 0
+            display_coverage_metrics(met, start_date, end_date, min_glob, max_glob, extra_text=f"Gemiddeld waren er **{format_ship_count(avg)}** schepen per dag actief *(berekend over {days} dagen)*. {SOURCE_CITATION}")
             
-            route_data = df[df['Status'].astype(str) == selected_route].copy()
-            route_data = route_data.sort_values(by='DateObj')
+            sc = route_data['Ship'].value_counts().reset_index()
+            sc.columns = ['Ship', 'Days']
+            st.altair_chart(alt.Chart(sc).mark_bar().encode(
+                x=alt.X('Days:Q', title='Aantal dagen ingezet', axis=alt.Axis(tickMinStep=1, format='d')),
+                y=alt.Y('Ship:N', sort='-x', title='Schip', axis=alt.Axis(labelLimit=500)),
+                color=alt.Color('Ship:N', scale=global_ship_scale, legend=None), tooltip=['Ship:N', 'Days:Q']
+            ).properties(height=80 + len(sc)*35), width='stretch')
             
-            st.subheader(f"Welke schepen voeren op: {selected_route}?")
-            render_period_header(start_date, end_date, min_global_date, max_global_date, "dienst")
-            
-            if not route_data.empty:
-                route_metrics = calculate_metrics(route_data)
-                
-                total_ship_entries = len(route_data)
-                unique_days_active = route_data['DateObj'].nunique()
-                avg_ships = 0
-                if unique_days_active > 0:
-                    avg_ships = total_ship_entries / unique_days_active
-                
-                formatted_avg = format_ship_count(avg_ships)
-
-                ship_counts = route_data['Ship'].value_counts().reset_index()
-                ship_counts.columns = ['Ship', 'Days']
-                
-                # AANGEPAST: BRONVERMELDING TOEVOEGEN
-                avg_text = f"Gemiddeld waren er **{formatted_avg}** schepen per dag actief *(berekend over {unique_days_active} dagen)*. {SOURCE_CITATION}"
-                
-                display_coverage_metrics(route_metrics, start_date, end_date, min_global_date, max_global_date, extra_text=avg_text)
-                
-                dynamic_height = 80 + (len(ship_counts) * 35)
-                
-                bar_chart = alt.Chart(ship_counts).mark_bar().encode(
-                    x=alt.X('Days:Q', title='Aantal dagen ingezet', axis=alt.Axis(tickMinStep=1, format='d')),
-                    y=alt.Y('Ship:N', sort='-x', title='Schip', axis=alt.Axis(labelLimit=500)), 
-                    color=alt.Color('Ship:N', scale=global_ship_scale, legend=None), 
-                    tooltip=['Ship:N', 'Days:Q']
-                ).properties(height=dynamic_height)
-                
-                st.altair_chart(bar_chart, width='stretch')
-                
-                st.markdown("### Ruwe data")
-                st.dataframe(route_data[['DateRaw', 'Source_File_Month', 'Ship']], width='stretch', height=500, hide_index=True)
-            else:
-                st.info(f"Geen data gevonden voor **{selected_route}** in de periode {format_dutch_date(start_date)} t/m {format_dutch_date(end_date)}.")
+            st.markdown("### Ruwe data")
+            st.dataframe(route_data[['DateRaw', 'Source_File_Month', 'Ship']], width='stretch', height=500, hide_index=True)
         else:
-            st.warning("Geen diensten gevonden in de geselecteerde periode.")
+            st.info(f"Geen data voor {sel_route} in deze periode.")
 
-    # --- VIEW: MAANDOVERZICHT ---
     elif view_mode == "Maandoverzicht":
         st.title("Maandoverzichten")
+        # Simpele implementatie maandoverzicht (geen deep linking op maand/jaar niveau gevraagd, wel view)
+        mo = df[['Source_File_Month', 'Month_Start_Date']].drop_duplicates().sort_values('Month_Start_Date')
+        mo['Year'] = mo['Month_Start_Date'].dt.year
+        avail_years = sorted(mo['Year'].unique())
         
-        month_order_df = df[['Source_File_Month', 'Month_Start_Date']].drop_duplicates()
-        month_order_df = month_order_df.sort_values('Month_Start_Date')
-        
-        month_order_df['Year'] = month_order_df['Month_Start_Date'].dt.year
-        available_years = sorted(month_order_df['Year'].unique())
-        
-        if available_years:
-            col_sel_1, col_sel_2 = st.columns(2)
+        if avail_years:
+            c1, c2 = st.columns(2)
+            with c1: sy = st.selectbox("Selecteer Jaar:", avail_years)
+            with c2: sm = st.selectbox("Selecteer Maand:", mo[mo['Year'] == sy]['Source_File_Month'])
             
-            with col_sel_1:
-                selected_year = st.selectbox("Selecteer Jaar:", available_years)
-            
-            months_in_year = month_order_df[month_order_df['Year'] == selected_year]
-            
-            with col_sel_2:
-                selected_month = st.selectbox("Selecteer Maand:", months_in_year['Source_File_Month'])
-            
-            subset = df[df['Source_File_Month'] == selected_month].copy()
-            
-            st.subheader(f"Rooster: {selected_month}")
-            render_period_header(start_date, end_date, min_global_date, max_global_date, "maand")
-            
-            # AANGEPAST: BRONVERMELDING TOEVOEGEN
+            subset = df[df['Source_File_Month'] == sm].copy()
+            st.subheader(f"Rooster: {sm}")
+            render_period_header(start_date, end_date, min_glob, max_glob, "maand")
             st.caption(SOURCE_CITATION)
             
-            not_sailing_list = ['binnen', 'werkplaats', 'werf']
-            def assign_category(status):
-                if str(status).lower() in not_sailing_list:
-                    return "Aan de kant"
-                else:
-                    return "In de vaart"
+            # Pie logic
+            not_sailing = ['binnen', 'werkplaats', 'werf']
+            subset['Category'] = subset['Status'].apply(lambda x: "Aan de kant" if str(x).lower() in not_sailing else "In de vaart")
+            pie = subset['Category'].value_counts(normalize=True)
+            p_vaart = pie.get("In de vaart", 0)
+            p_kant = pie.get("Aan de kant", 0)
             
-            subset['Category'] = subset['Status'].apply(assign_category)
+            display_coverage_metrics(calculate_metrics(subset), start_date, end_date, min_glob, max_glob, show_years=False)
+            st.markdown(f"🟢 **In de vaart:** {p_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {p_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🚢 **Totaal schepen:** {subset['Ship'].nunique()}")
             
-            pie_data = subset['Category'].value_counts().reset_index()
-            pie_data.columns = ['Category', 'Count']
-            pie_data['Percent'] = pie_data['Count'] / pie_data['Count'].sum()
-            
-            val_vaart = pie_data.loc[pie_data['Category'] == 'In de vaart', 'Percent']
-            val_kant = pie_data.loc[pie_data['Category'] == 'Aan de kant', 'Percent']
-            
-            pct_vaart = val_vaart.iloc[0] if not val_vaart.empty else 0
-            pct_kant = val_kant.iloc[0] if not val_kant.empty else 0
-            
-            num_unique_ships = subset['Ship'].nunique()
-            
-            caption_str = f"🟢 **In de vaart:** {pct_vaart:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🔴 **Aan de kant:** {pct_kant:.1%} &nbsp;&nbsp; | &nbsp;&nbsp; 🚢 **Totaal schepen:** {num_unique_ships}"
-
-            subset_metrics = calculate_metrics(subset)
-            display_coverage_metrics(subset_metrics, start_date, end_date, min_global_date, max_global_date, show_years=False)
-            
-            st.markdown(caption_str)
-            
-            matrix_view = subset.pivot(index='Day', columns='Ship', values='Status')
-            st.dataframe(matrix_view, width='stretch', height=600)
-            
+            st.dataframe(subset.pivot(index='Day', columns='Ship', values='Status'), width='stretch', height=600)
         else:
-            st.warning("Geen maanden beschikbaar in de geselecteerde periode.")
+            st.warning("Geen maanden beschikbaar.")
 
-# --- FOOTER ---
 st.markdown("---")
-# AANGEPAST: Link opent in nieuw tabblad via HTML
 st.markdown(f'<a href="https://www.psdnet.nl" target="_blank">PSDnet.nl</a> Archief vaarstaten', unsafe_allow_html=True)
