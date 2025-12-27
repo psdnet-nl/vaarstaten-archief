@@ -102,7 +102,6 @@ st.markdown(
             padding-top: 8rem !important; padding-left: 1rem !important; padding-right: 1rem !important;
         }
         
-        /* Reset marge voor tekstlinks op mobiel */
         div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
             margin-left: 0px !important; margin-top: 5px !important;
         }
@@ -122,26 +121,21 @@ st.markdown(
         border-color: #1a2e1a; color: #1a2e1a; background-color: rgba(255,255,255,0.4);
     }
     
-    /* JAARTALLEN STYLING */
     div.year-link-marker { display: none; }
     
-    /* Desktop Marge */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
         display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 0.4rem;
         margin-top: -10px; margin-left: -23px; 
     }
     
-    /* Sidebar Reset */
     section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) {
         margin-left: 0px !important;
     }
     
-    /* Tekst */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) div[data-testid="stMarkdownContainer"] p {
         margin-bottom: 0px !important; font-size: 0.85rem; color: rgba(49, 51, 63, 0.7); margin-right: 5px; font-weight: 600;
     }
 
-    /* Links */
     div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] div.year-link-marker) button {
         background-color: transparent !important; border: none !important; color: #003366 !important;
         text-decoration: underline; padding: 0px !important; margin: 0px !important; height: auto !important;
@@ -196,9 +190,7 @@ def parse_date_param(param_value, default_date):
     except (ValueError, TypeError):
         return default_date
 
-# Functie om de URL te synchroniseren met de HUIDIGE sessie staat
 def sync_url():
-    # 1. Huidige View ophalen
     current_view = st.session_state.get('view_mode_selector', VIEW_OPTIONS[0])
     try:
         view_idx = VIEW_OPTIONS.index(current_view)
@@ -208,15 +200,12 @@ def sync_url():
 
     new_params = {"view": view_code}
 
-    # 2. Datums toevoegen
     if 'date_range_picker' in st.session_state:
         rng = st.session_state['date_range_picker']
         if len(rng) > 0: new_params["start"] = rng[0].strftime("%Y-%m-%d")
         if len(rng) > 1: new_params["end"] = rng[1].strftime("%Y-%m-%d")
 
-    # 3. Context-specifieke parameters toevoegen
     if view_code == "veerboot":
-        # Gebruik de widget waarde als die bestaat, anders de preference
         val = st.session_state.get('widget_ship_selector', st.session_state.get('pref_selected_ship'))
         if val: new_params["ship"] = val
             
@@ -224,23 +213,18 @@ def sync_url():
         val = st.session_state.get('widget_route_selector', st.session_state.get('pref_selected_route'))
         if val: new_params["route"] = val
 
-    # 4. URL Overschrijven (Oude params worden gewist)
     st.query_params.clear()
     for key, value in new_params.items():
         st.query_params[key] = value
 
-# Initialisatie bij laden pagina (Lees URL -> Sessie)
 if 'init_done' not in st.session_state:
     qp = st.query_params
-    
-    # Defaults instellen als URL leeg is
     if "view" not in qp:
         st.session_state['view_mode_index'] = 0
         st.session_state['pref_selected_ship'] = "Koningin Emma (1933)"
         st.query_params["view"] = "veerboot"
         st.query_params["ship"] = "Koningin Emma (1933)"
     else:
-        # URL parameters overnemen
         val = qp["view"]
         if val in URL_KEYS: st.session_state['view_mode_index'] = URL_KEYS[val]
         if "ship" in qp: st.session_state['pref_selected_ship'] = qp["ship"]
@@ -250,7 +234,6 @@ if 'init_done' not in st.session_state:
             
     st.session_state['init_done'] = True
 
-# Callbacks voor widgets (Actie -> Update URL)
 def on_view_change(): sync_url()
 def on_ship_change(): 
     st.session_state['pref_selected_ship'] = st.session_state['widget_ship_selector']
@@ -379,7 +362,6 @@ if not raw_df.empty:
     max_glob = raw_df['DateObj'].max().date()
     cur_start = parse_date_param(st.session_state.get('url_start_date', ''), min_glob)
     cur_end = parse_date_param(st.session_state.get('url_end_date', ''), max_glob)
-    # Clamp
     cur_start = max(min_glob, cur_start)
     cur_end = min(max_glob, cur_end)
     if 'date_range_picker' not in st.session_state:
@@ -432,9 +414,14 @@ if not df.empty:
         st.title("Vaarstaten per veerboot")
         ships = sorted(raw_df['Ship'].unique())
         if ships:
-            # Pre-select based on session state preference or url
-            pref = st.session_state.get('pref_selected_ship', "Koningin Emma (1933)")
-            if pref not in ships: pref = ships[0]
+            pref = st.session_state.get('pref_selected_ship', "")
+            if pref not in ships:
+                if "Koningin Emma (1933)" in ships:
+                    pref = "Koningin Emma (1933)"
+                elif ships:
+                    pref = ships[0]
+                st.session_state['pref_selected_ship'] = pref
+
             try: s_idx = ships.index(pref)
             except: s_idx = 0
             
@@ -451,15 +438,16 @@ if not df.empty:
                 
                 st.markdown("### Tijdslijn Inzet")
                 excl = ["Overbrenging", "Speciale vaart", "Gestaakt", "Gevorderd door burgemeester Zierikzee"]
-                # Visible: Not in exclude AND NOT starting with Ligplaats
                 vis = ship_data[(~ship_data['Status'].isin(excl)) & (~ship_data['Status'].astype(str).str.startswith("Ligplaats"))].copy()
-                # Hidden: In exclude OR starting with Ligplaats
                 hid = ship_data[(ship_data['Status'].isin(excl)) | (ship_data['Status'].astype(str).str.startswith("Ligplaats"))].copy()
                 
-                int_v = prepare_timeline_data(vis, sel_ship) if not vis.empty else pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
-                int_h = prepare_timeline_data(hid, sel_ship) if not hid.empty else pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
+                intervals_visible = pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
+                if not vis.empty:
+                    intervals_visible = prepare_timeline_data(vis, sel_ship)
+                intervals_hidden = pd.DataFrame(columns=['Start', 'End', 'ShipLabel', 'Status'])
+                if not hid.empty:
+                    intervals_hidden = prepare_timeline_data(hid, sel_ship)
                 
-                # Chart
                 dom_s = pd.Timestamp(start_date).to_pydatetime()
                 dom_e = (pd.Timestamp(end_date) + pd.Timedelta(days=1)).to_pydatetime()
                 
@@ -467,19 +455,17 @@ if not df.empty:
                     x=alt.X('Start:T', title=None, axis=alt.Axis(format='%d-%m-%Y', labelAngle=0), scale=alt.Scale(domain=[dom_s, dom_e])),
                     x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), color=alt.value("url(#diagonal-stripe)")
                 )
-                
-                c_hid = alt.Chart(int_h).mark_bar(height=30, opacity=1).encode(
-                    x='Start:T', x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), 
+                hidden_chart = alt.Chart(intervals_hidden).mark_bar(height=30, opacity=1.0).encode(
+                    x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), 
                     color=alt.value("#999999"), tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
                 )
-                c_vis = alt.Chart(int_v).mark_bar(height=30).encode(
-                    x='Start:T', x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
+                visible_chart = alt.Chart(intervals_visible).mark_bar(height=30).encode(
+                    x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
                     color=alt.Color('Status:N', scale=global_status_scale, legend=None),
                     tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
                 )
-                st.altair_chart((base + c_hid + c_vis).properties(height=120), width='stretch')
+                st.altair_chart((base + hidden_chart + visible_chart).properties(height=120), width='stretch')
                 
-                # Stats
                 st.caption("**Verdeling van statussen:**")
                 cts = ship_data['Status'].value_counts().reset_index()
                 cts.columns = ['Status', 'Count']
@@ -489,7 +475,6 @@ if not df.empty:
                     color=alt.Color('Status:N', scale=global_status_scale, legend=None), tooltip=['Status:N', 'Count:Q']
                 ).properties(height=80 + len(cts)*35), width='stretch')
                 
-                # Table (ALL statuses, even Ligplaats)
                 sum_src = ship_data.dropna(subset=['Status']).copy()
                 if len(sum_src) < 366:
                     filt_txt = ""
@@ -515,10 +500,21 @@ if not df.empty:
     elif view_mode == "Vaarstaten per veerdienst":
         st.title("Vaarstaten per veerdienst")
         excl = ["Aan de grond", "Binnen", "Defect", "Gestaakt", "Gevorderd door burgemeester Zierikzee", "Ligplaats Katseveer", "Ligplaats Perkpolder", "Ligplaats Vlissingen", "Ligplaats Zierikzee", "Overbrenging", "Reserve Vlissingen-Breskens", "Speciale vaart", "Werf", "Werkplaats"]
-        routes = sorted([str(x) for x in raw_df['Status'].unique() if pd.notna(x) and str(x) not in excl and not str(x).startswith("Ligplaats") and not str(x).startswith("Reserve")])
+        all_statuses = raw_df['Status'].unique()
+        routes = sorted([str(x) for x in all_statuses if pd.notna(x) and str(x) not in excl and not str(x).startswith("Ligplaats") and not str(x).startswith("Reserve")])
         
-        pref = st.session_state.get('pref_selected_route', routes[0] if routes else "")
-        if pref not in routes and routes: pref = routes[0]
+        pref = st.session_state.get('pref_selected_route', "")
+        
+        # FIX: Check if preference is valid
+        if pref not in routes:
+            # Try Vlissingen-Breskens explicitly FIRST
+            if "Vlissingen-Breskens" in routes:
+                pref = "Vlissingen-Breskens"
+            # Fallback to first available route if Vlissingen-Breskens is missing
+            elif routes:
+                pref = routes[0]
+            st.session_state['pref_selected_route'] = pref
+
         try: r_idx = routes.index(pref)
         except: r_idx = 0
         
@@ -545,11 +541,12 @@ if not df.empty:
             st.markdown("### Ruwe data")
             st.dataframe(route_data[['DateRaw', 'Source_File_Month', 'Ship']], width='stretch', height=500, hide_index=True)
         else:
-            st.info(f"Geen data voor {sel_route} in deze periode.")
+            st.info(f"Geen data gevonden voor **{sel_route}** in de periode {format_dutch_date(start_date)} t/m {format_dutch_date(end_date)}.")
+        if not routes:
+            st.warning("Geen diensten gevonden in de geselecteerde periode.")
 
     elif view_mode == "Maandoverzicht":
         st.title("Maandoverzichten")
-        # Simpele implementatie maandoverzicht (geen deep linking op maand/jaar niveau gevraagd, wel view)
         mo = df[['Source_File_Month', 'Month_Start_Date']].drop_duplicates().sort_values('Month_Start_Date')
         mo['Year'] = mo['Month_Start_Date'].dt.year
         avail_years = sorted(mo['Year'].unique())
@@ -564,7 +561,6 @@ if not df.empty:
             render_period_header(start_date, end_date, min_glob, max_glob, "maand")
             st.caption(SOURCE_CITATION)
             
-            # Pie logic
             not_sailing = ['binnen', 'werkplaats', 'werf']
             subset['Category'] = subset['Status'].apply(lambda x: "Aan de kant" if str(x).lower() in not_sailing else "In de vaart")
             pie = subset['Category'].value_counts(normalize=True)
@@ -576,7 +572,8 @@ if not df.empty:
             
             st.dataframe(subset.pivot(index='Day', columns='Ship', values='Status'), width='stretch', height=600)
         else:
-            st.warning("Geen maanden beschikbaar.")
+            st.warning("Geen maanden beschikbaar in de geselecteerde periode.")
 
+# --- FOOTER ---
 st.markdown("---")
 st.markdown(f'<a href="https://www.psdnet.nl" target="_blank">PSDnet.nl</a> Archief vaarstaten', unsafe_allow_html=True)
