@@ -455,16 +455,19 @@ if not df.empty:
                     x=alt.X('Start:T', title=None, axis=alt.Axis(format='%d-%m-%Y', labelAngle=0), scale=alt.Scale(domain=[dom_s, dom_e])),
                     x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), color=alt.value("url(#diagonal-stripe)")
                 )
-                hidden_chart = alt.Chart(intervals_hidden).mark_bar(height=30, opacity=1.0).encode(
-                    x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None), 
-                    color=alt.value("#999999"), tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
-                )
-                visible_chart = alt.Chart(intervals_visible).mark_bar(height=30).encode(
-                    x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
-                    color=alt.Color('Status:N', scale=global_status_scale, legend=None),
-                    tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
-                )
-                st.altair_chart((base + hidden_chart + visible_chart).properties(height=120), width='stretch')
+                layers = [base]
+                if not intervals_hidden.empty:
+                    layers.append(alt.Chart(intervals_hidden).mark_bar(height=30, opacity=1.0).encode(
+                        x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
+                        color=alt.value("#999999"), tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
+                    ))
+                if not intervals_visible.empty:
+                    layers.append(alt.Chart(intervals_visible).mark_bar(height=30).encode(
+                        x=alt.X('Start:T'), x2='End:T', y=alt.Y('ShipLabel:N', title=None, axis=None),
+                        color=alt.Color('Status:N', scale=global_status_scale, legend=None),
+                        tooltip=['Status:N', alt.Tooltip('Start:T', format='%d-%m-%Y'), alt.Tooltip('End:T', format='%d-%m-%Y')]
+                    ))
+                st.altair_chart(alt.layer(*layers).properties(height=120), width='stretch')
                 
                 st.caption("**Verdeling van statussen:**")
                 cts = ship_data['Status'].value_counts().reset_index()
@@ -532,11 +535,12 @@ if not df.empty:
             
             sc = route_data['Ship'].value_counts().reset_index()
             sc.columns = ['Ship', 'Days']
-            st.altair_chart(alt.Chart(sc).mark_bar().encode(
-                x=alt.X('Days:Q', title='Aantal dagen ingezet', axis=alt.Axis(tickMinStep=1, format='d')),
-                y=alt.Y('Ship:N', sort='-x', title='Schip', axis=alt.Axis(labelLimit=500)),
-                color=alt.Color('Ship:N', scale=global_ship_scale, legend=None), tooltip=['Ship:N', 'Days:Q']
-            ).properties(height=80 + len(sc)*35), width='stretch')
+            if not sc.empty:
+                st.altair_chart(alt.Chart(sc).mark_bar().encode(
+                    x=alt.X('Days:Q', title='Aantal dagen ingezet', axis=alt.Axis(tickMinStep=1, format='d')),
+                    y=alt.Y('Ship:N', sort='-x', title='Schip', axis=alt.Axis(labelLimit=500)),
+                    color=alt.Color('Ship:N', scale=global_ship_scale, legend=None), tooltip=['Ship:N', 'Days:Q']
+                ).properties(height=80 + len(sc)*35), width='stretch')
             
             st.markdown("### Ruwe data")
             st.dataframe(route_data[['DateRaw', 'Source_File_Month', 'Ship']], width='stretch', height=500, hide_index=True)
